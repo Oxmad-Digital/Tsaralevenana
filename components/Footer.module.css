@@ -1,0 +1,65 @@
+.footer {
+  background-color: var(--color-footer-bg);
+  padding: clamp(56px, 8vw, 84px) clamp(20px, 5vw, 64px) 40px;
+  border-top: 1px solid rgba(160, 125, 52, 0.16);
+  text-align: center;
+}
+
+.ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.icon {
+  width: 30px;
+  height: 42px;
+  color: var(--color-gold);
+}
+
+.lineLeft,
+.lineRight {
+  height: 1px;
+  width: 50px;
+}
+
+.lineLeft {
+  background: linear-gradient(to right, transparent, var(--color-gold));
+}
+
+.lineRight {
+  background: linear-gradient(to left, transparent, var(--color-gold));
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.name {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  color: var(--color-text);
+  margin-top: 6px;
+  letter-spacing: 0.03em;
+}
+
+.slogan {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 19px;
+  color: #8a7a52;
+  margin-top: 14px;
+}
+
+.copyright {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--color-text-faint);
+  margin-top: 38px;
+}

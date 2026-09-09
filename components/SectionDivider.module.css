@@ -1,0 +1,28 @@
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 44px 20px;
+  background: var(--color-bg-alt);
+}
+
+.icon {
+  width: 32px;
+  height: 46px;
+  color: var(--color-gold);
+}
+
+.lineLeft,
+.lineRight {
+  height: 1px;
+  width: clamp(60px, 14vw, 200px);
+}
+
+.lineLeft {
+  background: linear-gradient(to right, transparent, rgba(160, 125, 52, 0.5));
+}
+
+.lineRight {
+  background: linear-gradient(to left, transparent, rgba(160, 125, 52, 0.5));
+}

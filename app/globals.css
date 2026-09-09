@@ -1,0 +1,81 @@
+:root {
+  --color-bg: #f6f1e7;
+  --color-bg-alt: #efe8d9;
+  --color-bg-card: #fbf7ee;
+  --color-footer-bg: #ece3d2;
+  --color-text: #2c2720;
+  --color-text-soft: #5e5648;
+  --color-text-muted: #6a6253;
+  --color-text-faint: #9a9482;
+  --color-gold: #a07d34;
+  --color-gold-hover: #b8924a;
+  --color-cream: #f6ecd6;
+  --font-heading: var(--font-cormorant), serif;
+  --font-body: var(--font-jost), sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-bg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-faint);
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 18px;
+}
+
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: clamp(40px, 6vw, 76px);
+  line-height: 1;
+  color: var(--color-text);
+}
+
+@keyframes fadeRise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

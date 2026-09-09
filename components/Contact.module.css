@@ -1,0 +1,164 @@
+.contact {
+  padding: clamp(80px, 11vw, 140px) clamp(20px, 5vw, 64px);
+  background: var(--color-bg-alt);
+  border-top: 1px solid rgba(160, 125, 52, 0.1);
+}
+
+.grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: clamp(40px, 6vw, 72px);
+}
+
+.intro {
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--color-text-soft);
+  font-weight: 300;
+  margin-top: 26px;
+  max-width: 440px;
+}
+
+.contactList {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  margin-top: 44px;
+}
+
+.contactRow {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.contactLabel {
+  font-family: var(--font-heading);
+  color: var(--color-gold);
+  font-size: 18px;
+  min-width: 88px;
+  letter-spacing: 0.04em;
+}
+
+.contactValue {
+  font-size: 17px;
+  color: var(--color-text);
+  letter-spacing: 0.03em;
+}
+
+.contactValueBreak {
+  font-size: 17px;
+  color: var(--color-text);
+  word-break: break-all;
+}
+
+.panel {
+  background: linear-gradient(160deg, #fbf7ee, #f0e7d6);
+  border: 1px solid rgba(160, 125, 52, 0.2);
+  padding: clamp(28px, 4vw, 44px);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #8a7a52;
+}
+
+.input,
+.textarea {
+  background: #ffffff;
+  border: 1px solid rgba(160, 125, 52, 0.38);
+  color: var(--color-text);
+  padding: 13px 15px;
+  font-size: 15px;
+  outline: none;
+  min-width: 0;
+}
+
+.textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.submitButton {
+  margin-top: 6px;
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-bg);
+  background: var(--color-gold);
+  border: 1px solid var(--color-gold);
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.submitButton:hover {
+  background: var(--color-gold-hover);
+  border-color: var(--color-gold-hover);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  font-size: 13px;
+  color: #a4453a;
+  line-height: 1.5;
+}
+
+.confirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 380px;
+}
+
+.confirmationIcon {
+  width: 42px;
+  height: 58px;
+  color: var(--color-gold);
+  margin-bottom: 18px;
+}
+
+.confirmationTitle {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 32px;
+  color: var(--color-text);
+  margin-bottom: 14px;
+}
+
+.confirmationText {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+  font-weight: 300;
+  max-width: 340px;
+}

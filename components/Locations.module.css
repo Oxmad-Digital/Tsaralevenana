@@ -1,0 +1,75 @@
+.locations {
+  padding: clamp(80px, 11vw, 140px) clamp(20px, 5vw, 64px);
+  background: var(--color-bg-alt);
+  border-top: 1px solid rgba(160, 125, 52, 0.1);
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: clamp(50px, 7vw, 80px);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+}
+
+.card {
+  background: var(--color-bg-card);
+  border: 1px solid rgba(160, 125, 52, 0.18);
+  display: flex;
+  flex-direction: column;
+}
+
+.photo {
+  aspect-ratio: 1 / 1;
+  width: 78%;
+  margin: 28px auto 0;
+}
+
+.details {
+  padding: 32px clamp(24px, 3vw, 38px) 36px;
+}
+
+.tag {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 8px;
+}
+
+.name {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 29px;
+  color: var(--color-text);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.rule {
+  width: 44px;
+  height: 1px;
+  background: var(--color-gold);
+  margin-bottom: 20px;
+}
+
+.address,
+.phone {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--color-text-muted);
+  font-weight: 300;
+}
+
+.address {
+  margin-bottom: 8px;
+}
