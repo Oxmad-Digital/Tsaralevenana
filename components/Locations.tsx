@@ -8,6 +8,13 @@ const locationPhotos: Record<string, string> = {
   "Deuxième emplacement": images.MG_1739_DxO,
 };
 
+const locationPhotoAlts: Record<string, string> = {
+  "Premier emplacement":
+    "Façade du premier emplacement de la Maison Funéraire Tsaralevenana, Antananarivo",
+  "Deuxième emplacement":
+    "Façade du deuxième emplacement de la Maison Funéraire Tsaralevenana, Antananarivo",
+};
+
 export default function Locations() {
   return (
     <section id="emplacements" className={styles.locations}>
@@ -21,7 +28,7 @@ export default function Locations() {
             <div key={location.name} className={styles.card}>
               <PhotoFrame
                 src={locationPhotos[location.name]}
-                alt={location.name}
+                alt={locationPhotoAlts[location.name]}
                 placeholder="Photo de l'emplacement"
                 className={styles.photo}
               />

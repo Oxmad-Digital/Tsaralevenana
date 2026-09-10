@@ -7,11 +7,11 @@ import { logoUrl } from "@/lib/images";
 import styles from "./Navbar.module.css";
 
 const navLinks = [
-  { href: "#apropos", label: "À propos" },
-  { href: "#prestations", label: "Prestations" },
-  { href: "#processus", label: "Processus" },
-  { href: "#galerie", label: "Galerie" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/#apropos", label: "À propos" },
+  { href: "/#prestations", label: "Prestations" },
+  { href: "/#processus", label: "Processus" },
+  { href: "/#galerie", label: "Galerie" },
+  { href: "/#faq", label: "FAQ" },
 ];
 
 export default function Navbar() {
@@ -21,7 +21,7 @@ export default function Navbar() {
 
   return (
     <nav className={styles.navbar}>
-      <a href="#accueil" className={styles.brand} onClick={closeMenu}>
+      <a href="/#accueil" className={styles.brand} onClick={closeMenu}>
         <Image
           src={logoUrl}
           alt={`${siteInfo.name} - ${siteInfo.tagline}`}
@@ -38,7 +38,7 @@ export default function Navbar() {
             {link.label}
           </a>
         ))}
-        <a href="#contact" className={styles.contactButton}>
+        <a href="/#contact" className={styles.contactButton}>
           Contact
         </a>
       </div>
@@ -66,7 +66,7 @@ export default function Navbar() {
             {link.label}
           </a>
         ))}
-        <a href="#contact" className={styles.mobileContactButton} onClick={closeMenu}>
+        <a href="/#contact" className={styles.mobileContactButton} onClick={closeMenu}>
           Contact
         </a>
       </div>

@@ -19,9 +19,9 @@ const jost = Jost({
 });
 
 export const metadata: Metadata = {
-  title: "Maison Funéraire Tsaralevenana | Antananarivo",
+  title: "Maison Funéraire Tsaralevenana | Pompes Funèbres",
   description:
-    "Présent à vos côtés, dans chaque étape du deuil. Organisation des obsèques, rapatriement, crémation et accompagnement à Antananarivo, Madagascar.",
+    "Maison Funéraire Tsaralevenana à Antananarivo : espace de veillée, crémation, service traiteur et rapatriement de corps vers Madagascar. Contactez-nous.",
 };
 
 export default function RootLayout({

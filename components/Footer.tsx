@@ -17,6 +17,21 @@ export default function Footer() {
       <p className={styles.slogan}>{siteInfo.slogan}</p>
       <p className={styles.copyright}>
         © {year} {siteInfo.tagline} {siteInfo.name} — Tous droits réservés.
+        {" — "}
+        <a href="/mentions-legales" className={styles.legalLink}>
+          Mentions légales
+        </a>
+      </p>
+      <p className={styles.credit}>
+        Réalisé par{" "}
+        <a
+          href="https://www.oxmad-digital.mg/"
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          className={styles.creditLink}
+        >
+          Oxmad Digital
+        </a>
       </p>
     </footer>
   );

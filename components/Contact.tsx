@@ -120,6 +120,7 @@ export default function Contact() {
                   onChange={updateField("name")}
                   placeholder="Votre nom"
                   className={styles.input}
+                  aria-label="Nom complet"
                   required
                 />
               </div>
@@ -132,6 +133,7 @@ export default function Contact() {
                     onChange={updateField("email")}
                     placeholder="email@exemple.com"
                     className={styles.input}
+                    aria-label="Adresse email"
                     required
                   />
                 </div>
@@ -142,6 +144,7 @@ export default function Contact() {
                     onChange={updateField("phone")}
                     placeholder="+261 ..."
                     className={styles.input}
+                    aria-label="Numéro de téléphone"
                   />
                 </div>
               </div>
@@ -151,6 +154,7 @@ export default function Contact() {
                   value={form.type}
                   onChange={updateField("type")}
                   className={styles.input}
+                  aria-label="Objet de la demande"
                 >
                   {contactFormOptions.map((option) => (
                     <option key={option}>{option}</option>
@@ -165,6 +169,7 @@ export default function Contact() {
                   rows={4}
                   placeholder="Comment pouvons-nous vous aider ?"
                   className={styles.textarea}
+                  aria-label="Votre message"
                   required
                 />
               </div>

@@ -63,3 +63,29 @@
   color: var(--color-text-faint);
   margin-top: 38px;
 }
+
+.credit {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--color-text-faint);
+  margin-top: 10px;
+}
+
+.creditLink {
+  color: var(--color-gold);
+  text-decoration: none;
+}
+
+.creditLink:hover {
+  color: var(--color-gold-hover);
+}
+
+.legalLink {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.legalLink:hover {
+  color: var(--color-gold);
+}

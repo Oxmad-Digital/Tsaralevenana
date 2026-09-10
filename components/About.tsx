@@ -23,7 +23,7 @@ export default function About() {
         </div>
         <div>
           <p className="eyebrow">Qui sommes-nous</p>
-          <h2 className="sectionTitle">
+          <h2 className={`sectionTitle ${styles.title}`}>
             Un accompagnement
             <br />
             digne et bienveillant
