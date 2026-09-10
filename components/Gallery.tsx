@@ -80,10 +80,6 @@ export default function Gallery() {
             </span>
           </button>
         </div>
-        <p className={styles.hint}>
-          Glissez vos photos directement dans les cadres pour personnaliser
-          la galerie.
-        </p>
       </div>
     </section>
   );
