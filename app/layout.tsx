@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Jost } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { siteInfo } from "@/lib/data";
 import { heroUrl, faviconDarkUrl, faviconLightUrl } from "@/lib/images";
+import PageViewTracker from "@/components/PageViewTracker";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -103,6 +104,7 @@ export default function RootLayout({
         <a href="#contenu" className="skipLink">
           Aller au contenu
         </a>
+        <PageViewTracker />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}

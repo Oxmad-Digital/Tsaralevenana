@@ -41,6 +41,22 @@ export default function Navbar() {
         <a href="/#contact" className={styles.contactButton}>
           Contact
         </a>
+        <a href="/admin" className={styles.accountLink} aria-label="Espace administrateur">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M20 21a8 8 0 0 0-16 0" />
+            <circle cx="12" cy="8" r="4.5" />
+          </svg>
+        </a>
       </div>
 
       <button
@@ -68,6 +84,9 @@ export default function Navbar() {
         ))}
         <a href="/#contact" className={styles.mobileContactButton} onClick={closeMenu}>
           Contact
+        </a>
+        <a href="/admin" className={styles.mobileAccountLink} onClick={closeMenu}>
+          Espace administrateur
         </a>
       </div>
     </nav>

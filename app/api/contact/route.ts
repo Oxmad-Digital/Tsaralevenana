@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { sql } from "@/lib/db";
 
 const CONTACT_RECIPIENT = process.env.CONTACT_EMAIL as string;
 
@@ -64,6 +65,15 @@ export async function POST(request: Request) {
       <p>${message.replace(/\n/g, "<br />")}</p>
     </div>
   `;
+
+  try {
+    await sql`
+      INSERT INTO contact_submissions (name, email, phone, type, message)
+      VALUES (${name}, ${email}, ${phone || null}, ${type || null}, ${message})
+    `;
+  } catch (dbError) {
+    console.error("Contact DB insert error:", dbError);
+  }
 
   try {
     const { error } = await resend.emails.send({

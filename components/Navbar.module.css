@@ -61,6 +61,23 @@
   color: var(--color-gold);
 }
 
+.accountLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(160, 125, 52, 0.35);
+  border-radius: 50%;
+  color: var(--color-text-muted);
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.accountLink:hover {
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
 .burger {
   display: none;
   flex-direction: column;
@@ -148,5 +165,16 @@
     background: var(--color-gold);
     padding: 12px 24px;
     border: 1px solid var(--color-gold);
+  }
+
+  .mobileAccountLink {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+  }
+
+  .mobileAccountLink:hover {
+    color: var(--color-gold);
   }
 }

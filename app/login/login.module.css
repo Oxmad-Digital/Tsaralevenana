@@ -1,0 +1,150 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  padding: 24px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 380px;
+  background: var(--color-bg-card);
+  border: 1px solid rgba(160, 125, 52, 0.2);
+  padding: 40px 32px;
+  box-shadow: 0 12px 32px rgba(44, 39, 32, 0.08);
+}
+
+.logo {
+  height: 44px;
+  width: auto;
+  align-self: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 26px;
+  color: var(--color-text);
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: 6px;
+  margin-bottom: 28px;
+}
+
+.label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+}
+
+.input {
+  border: 1px solid rgba(160, 125, 52, 0.3);
+  background: var(--color-bg);
+  color: var(--color-text);
+  padding: 11px 14px;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.input:focus {
+  border-color: var(--color-gold);
+}
+
+.passwordField {
+  position: relative;
+  display: flex;
+  margin-bottom: 18px;
+}
+
+.passwordField .input {
+  flex: 1;
+  margin-bottom: 0;
+  padding-right: 44px;
+}
+
+.togglePassword {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.togglePassword:hover {
+  color: var(--color-gold);
+}
+
+.error {
+  color: #a03434;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.submit {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-bg);
+  background: var(--color-gold);
+  padding: 13px 20px;
+  border: 1px solid var(--color-gold);
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.submit:hover:not(:disabled) {
+  background: transparent;
+  color: var(--color-gold);
+}
+
+.submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  align-self: center;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  margin-top: 24px;
+  padding: 6px 4px;
+  transition: color 0.2s, gap 0.2s;
+}
+
+.backLink svg {
+  transition: transform 0.2s;
+}
+
+.backLink:hover {
+  color: var(--color-gold);
+  gap: 9px;
+}
+
+.backLink:hover svg {
+  transform: translateX(-2px);
+}
