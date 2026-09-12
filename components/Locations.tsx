@@ -4,8 +4,8 @@ import PhotoFrame from "./PhotoFrame";
 import styles from "./Locations.module.css";
 
 const locationPhotos: Record<string, string> = {
-  "Premier emplacement": images["450A9810"],
-  "Deuxième emplacement": images.MG_1739_DxO,
+  "Premier emplacement": images.emplacement1,
+  "Deuxième emplacement": images.emplacement2,
 };
 
 const locationPhotoAlts: Record<string, string> = {
@@ -31,6 +31,7 @@ export default function Locations() {
                 alt={locationPhotoAlts[location.name]}
                 placeholder="Photo de l'emplacement"
                 className={styles.photo}
+                sizes="(max-width: 800px) 78vw, 460px"
               />
               <div className={styles.details}>
                 <div className={styles.tag}>{location.tag}</div>

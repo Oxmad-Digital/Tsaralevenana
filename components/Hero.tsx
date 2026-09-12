@@ -1,11 +1,21 @@
+import Image from "next/image";
 import FloralSprig from "./FloralSprig";
 import { siteInfo } from "@/lib/data";
+import { heroUrl } from "@/lib/images";
 import styles from "./Hero.module.css";
 
 export default function Hero() {
   return (
     <section id="accueil" className={styles.hero}>
-      <div aria-hidden="true" className={styles.backgroundImage} />
+      <Image
+        src={heroUrl}
+        alt=""
+        aria-hidden="true"
+        fill
+        priority
+        sizes="100vw"
+        className={styles.backgroundImage}
+      />
       <div aria-hidden="true" className={styles.backgroundGradient} />
       <div className={styles.content}>
         <div className={styles.ornament}>

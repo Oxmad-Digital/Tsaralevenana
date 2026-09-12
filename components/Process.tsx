@@ -28,9 +28,10 @@ export default function Process() {
             <div className={styles.cornerTopRight} />
             <div className={styles.cornerBottomLeft} />
             <PhotoFrame
-              src={images["450A0129"]}
+              src={images.miseEnBiere}
               alt="Étapes d'accompagnement de la Maison Funéraire Tsaralevenana"
               className={styles.photo}
+              sizes="(max-width: 800px) 100vw, 570px"
             />
           </div>
         </div>

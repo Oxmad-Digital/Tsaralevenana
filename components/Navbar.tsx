@@ -25,8 +25,8 @@ export default function Navbar() {
         <Image
           src={logoUrl}
           alt={`${siteInfo.name} - ${siteInfo.tagline}`}
-          width={110}
-          height={75}
+          width={76}
+          height={52}
           className={styles.brandLogo}
           priority
         />

@@ -16,9 +16,10 @@ export default function About() {
           <div className={styles.cornerTopRight} />
           <div className={styles.cornerBottomLeft} />
           <PhotoFrame
-            src={images.MG_1931_DxO}
+            src={images.equipe}
             alt="L'équipe de la Maison Funéraire Tsaralevenana"
             className={styles.photo}
+            sizes="(max-width: 800px) 100vw, 560px"
           />
         </div>
         <div>

@@ -8,6 +8,7 @@ type PhotoFrameProps = {
   className?: string;
   objectPosition?: string;
   objectFit?: "cover" | "contain";
+  sizes?: string;
 };
 
 /**
@@ -22,6 +23,7 @@ export default function PhotoFrame({
   className,
   objectPosition,
   objectFit,
+  sizes = "(max-width: 768px) 100vw, 50vw",
 }: PhotoFrameProps) {
   return (
     <div className={`${styles.frame} ${className ?? ""}`}>
@@ -30,7 +32,7 @@ export default function PhotoFrame({
           src={src}
           alt={alt}
           fill
-          sizes="(max-width: 768px) 100vw, 50vw"
+          sizes={sizes}
           className={styles.image}
           style={{
             ...(objectPosition ? { objectPosition } : {}),

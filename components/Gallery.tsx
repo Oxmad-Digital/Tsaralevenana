@@ -7,18 +7,13 @@ import styles from "./Gallery.module.css";
 
 const extraPhotos = [
   {
-    src: images.IMG_2217,
-    key: "IMG_2217",
-    alt: "Aménagement de la tente de réception pour les proches",
-  },
-  {
-    src: images.MG_1797_DxO,
-    key: "MG_1797_DxO",
+    src: images.tableTraiteur,
+    key: "tableTraiteur",
     alt: "Table du service traiteur avec boissons pour les invités",
   },
   {
-    src: images.MG_1835_DxO,
-    key: "MG_1835_DxO",
+    src: images.personnelPreparation,
+    key: "personnelPreparation",
     alt: "Personnel de Tsaralevenana préparant la table de cérémonie",
   },
 ];
@@ -35,29 +30,34 @@ export default function Gallery() {
         </div>
         <div className={styles.grid}>
           <PhotoFrame
-            src={images["450A0185"]}
+            src={images.facadeExterieure}
             alt="Façade extérieure de la Maison Funéraire Tsaralevenana à Antananarivo"
             className={styles.tall}
+            sizes="(max-width: 640px) 50vw, 25vw"
           />
           <PhotoFrame
-            src={images["450A9857"]}
+            src={images.salleVeillee}
             alt="Salle de veillée avec sièges à la Maison Funéraire Tsaralevenana"
             className={styles.square}
+            sizes="(max-width: 640px) 50vw, 25vw"
           />
           <PhotoFrame
-            src={images["450A9885_1"]}
+            src={images.salleCeremonie}
             alt="Intérieur de la salle de cérémonie avec éclairage d'ambiance"
             className={styles.square}
+            sizes="(max-width: 640px) 50vw, 25vw"
           />
           <PhotoFrame
-            src={images.MG_1665_DxO_1}
+            src={images.vehiculesFuneraires}
             alt="Véhicules de transport funéraire de Tsaralevenana"
             className={styles.square}
+            sizes="(max-width: 640px) 50vw, 25vw"
           />
           <PhotoFrame
-            src={images.IMG_2217_1}
+            src={images.tenteReception}
             alt="Espace traiteur sous tente avec tables dressées pour la réception"
             className={styles.wide}
+            sizes="(max-width: 640px) 50vw, 50vw"
           />
           {showMore &&
             extraPhotos.map((photo) => (
@@ -66,6 +66,7 @@ export default function Gallery() {
                 src={photo.src}
                 alt={photo.alt}
                 className={styles.square}
+                sizes="(max-width: 640px) 50vw, 25vw"
               />
             ))}
           <button
