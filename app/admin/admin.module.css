@@ -5,8 +5,10 @@
 
 .header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 10px 16px;
   padding: 16px clamp(20px, 5vw, 48px);
   background: var(--color-bg-card);
   border-bottom: 1px solid rgba(160, 125, 52, 0.2);
@@ -19,6 +21,12 @@
   font-family: var(--font-heading);
   font-size: 18px;
   color: var(--color-text);
+}
+
+@media (max-width: 380px) {
+  .brand {
+    font-size: 16px;
+  }
 }
 
 .logoutButton {
@@ -87,7 +95,7 @@
 
 .panelGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
 
@@ -160,12 +168,43 @@
   gap: 10px;
 }
 
+.lineChartWrap {
+  position: relative;
+}
+
 .lineChartSvg {
   width: 100%;
   height: auto;
   aspect-ratio: 280 / 100;
   display: block;
   overflow: visible;
+}
+
+.chartTooltip {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  margin-top: -10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: var(--color-bg);
+  border: 1px solid rgba(160, 125, 52, 0.35);
+  padding: 6px 10px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.chartTooltipValue {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-gold);
+}
+
+.chartTooltipLabel {
+  font-size: 10px;
+  color: var(--color-text-faint);
 }
 
 .lineChartLabels {
@@ -272,7 +311,7 @@
 .worldMapSvg {
   width: 100%;
   height: auto;
-  aspect-ratio: 800 / 450;
+  aspect-ratio: 800 / 400;
   display: block;
 }
 
@@ -330,4 +369,44 @@
   padding: 12px 12px 12px 0;
   border-bottom: 1px solid rgba(160, 125, 52, 0.1);
   color: var(--color-text);
+}
+
+@media (max-width: 640px) {
+  .table thead {
+    display: none;
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table tr {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(160, 125, 52, 0.15);
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    text-align: right;
+    overflow-wrap: anywhere;
+    padding: 4px 0;
+    border-bottom: none;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    text-align: left;
+    flex-shrink: 0;
+  }
 }

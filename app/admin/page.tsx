@@ -3,6 +3,7 @@ import { sql } from "@/lib/db";
 import { getCountryName } from "@/lib/countries";
 import styles from "./admin.module.css";
 import VisitsChart from "./VisitsChart";
+import ViewsTrendChart from "./ViewsTrendChart";
 import WorldMap from "./WorldMap";
 
 export const dynamic = "force-dynamic";
@@ -38,9 +39,6 @@ export default async function AdminDashboard() {
 
   const [
     totalViewsRows,
-    viewsTodayRows,
-    views7dRows,
-    views30dRows,
     uniqueVisitorsRows,
     totalClicksRows,
     dailyRows,
@@ -50,9 +48,6 @@ export default async function AdminDashboard() {
     recentContactsRows,
   ] = await Promise.all([
     sql`SELECT COUNT(*)::int AS count FROM page_views`,
-    sql`SELECT COUNT(*)::int AS count FROM page_views WHERE created_at >= date_trunc('day', now())`,
-    sql`SELECT COUNT(*)::int AS count FROM page_views WHERE created_at >= now() - interval '7 days'`,
-    sql`SELECT COUNT(*)::int AS count FROM page_views WHERE created_at >= now() - interval '30 days'`,
     sql`SELECT COUNT(DISTINCT visitor_id)::int AS count FROM page_views WHERE visitor_id IS NOT NULL`,
     sql`SELECT COUNT(*)::int AS count FROM click_events`,
     sql`
@@ -85,9 +80,6 @@ export default async function AdminDashboard() {
   ]);
 
   const totalViews = (totalViewsRows as CountRow[])[0]?.count ?? 0;
-  const viewsToday = (viewsTodayRows as CountRow[])[0]?.count ?? 0;
-  const views7d = (views7dRows as CountRow[])[0]?.count ?? 0;
-  const views30d = (views30dRows as CountRow[])[0]?.count ?? 0;
   const uniqueVisitors = (uniqueVisitorsRows as CountRow[])[0]?.count ?? 0;
   const totalClicks = (totalClicksRows as CountRow[])[0]?.count ?? 0;
   const totalContacts = (totalContactsRows as CountRow[])[0]?.count ?? 0;
@@ -116,18 +108,6 @@ export default async function AdminDashboard() {
 
       <div className={styles.statGrid}>
         <div className={styles.statTile}>
-          <span className={styles.statLabel}>Vues aujourd&apos;hui</span>
-          <span className={styles.statValue}>{viewsToday}</span>
-        </div>
-        <div className={styles.statTile}>
-          <span className={styles.statLabel}>Vues (7 jours)</span>
-          <span className={styles.statValue}>{views7d}</span>
-        </div>
-        <div className={styles.statTile}>
-          <span className={styles.statLabel}>Vues (30 jours)</span>
-          <span className={styles.statValue}>{views30d}</span>
-        </div>
-        <div className={styles.statTile}>
           <span className={styles.statLabel}>Vues totales</span>
           <span className={styles.statValue}>{totalViews}</span>
         </div>
@@ -147,59 +127,58 @@ export default async function AdminDashboard() {
 
       <div className={styles.panelGrid}>
         <VisitsChart days={days} maxDailyCount={maxDailyCount} />
-
-        <section className={styles.panel}>
-          <h2 className={styles.panelTitle}>Pages les plus visitées</h2>
-          {topPages.length === 0 ? (
-            <p className={styles.emptyState}>Pas encore de données.</p>
-          ) : (
-            <ul className={styles.topPagesList}>
-              {topPages.map((page) => (
-                <li key={page.path} className={styles.topPagesRow}>
-                  <div className={styles.topPagesMeta}>
-                    <span className={styles.topPagesPath}>{page.path}</span>
-                    <span className={styles.topPagesCount}>{page.count}</span>
-                  </div>
-                  <div className={styles.topPagesTrack}>
-                    <div
-                      className={styles.topPagesFill}
-                      style={{ width: `${(page.count / maxTopPageCount) * 100}%` }}
-                    />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+        <ViewsTrendChart days={days} maxDailyCount={maxDailyCount} />
       </div>
 
-      <div className={styles.panelGrid}>
-        <WorldMap countries={countries} />
+      <section className={styles.panel}>
+        <h2 className={styles.panelTitle}>Pages les plus visitées</h2>
+        {topPages.length === 0 ? (
+          <p className={styles.emptyState}>Pas encore de données.</p>
+        ) : (
+          <ul className={styles.topPagesList}>
+            {topPages.map((page) => (
+              <li key={page.path} className={styles.topPagesRow}>
+                <div className={styles.topPagesMeta}>
+                  <span className={styles.topPagesPath}>{page.path}</span>
+                  <span className={styles.topPagesCount}>{page.count}</span>
+                </div>
+                <div className={styles.topPagesTrack}>
+                  <div
+                    className={styles.topPagesFill}
+                    style={{ width: `${(page.count / maxTopPageCount) * 100}%` }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
-        <section className={styles.panel}>
-          <h2 className={styles.panelTitle}>Origine des visiteurs</h2>
-          {countries.length === 0 ? (
-            <p className={styles.emptyState}>Pas encore de données.</p>
-          ) : (
-            <ul className={styles.topPagesList}>
-              {countries.slice(0, 8).map((country) => (
-                <li key={country.code} className={styles.topPagesRow}>
-                  <div className={styles.topPagesMeta}>
-                    <span className={styles.topPagesPath}>{country.name}</span>
-                    <span className={styles.topPagesCount}>{country.count}</span>
-                  </div>
-                  <div className={styles.topPagesTrack}>
-                    <div
-                      className={styles.topPagesFill}
-                      style={{ width: `${(country.count / maxCountryCount) * 100}%` }}
-                    />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </div>
+      <WorldMap countries={countries} />
+
+      <section className={styles.panel}>
+        <h2 className={styles.panelTitle}>Origine des visiteurs</h2>
+        {countries.length === 0 ? (
+          <p className={styles.emptyState}>Pas encore de données.</p>
+        ) : (
+          <ul className={styles.topPagesList}>
+            {countries.slice(0, 8).map((country) => (
+              <li key={country.code} className={styles.topPagesRow}>
+                <div className={styles.topPagesMeta}>
+                  <span className={styles.topPagesPath}>{country.name}</span>
+                  <span className={styles.topPagesCount}>{country.count}</span>
+                </div>
+                <div className={styles.topPagesTrack}>
+                  <div
+                    className={styles.topPagesFill}
+                    style={{ width: `${(country.count / maxCountryCount) * 100}%` }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <section className={styles.panel}>
         <h2 className={styles.panelTitle}>Derniers messages de contact</h2>
@@ -219,10 +198,10 @@ export default async function AdminDashboard() {
               <tbody>
                 {recentContacts.map((contact, index) => (
                   <tr key={index}>
-                    <td>{contact.name}</td>
-                    <td>{contact.email}</td>
-                    <td>{contact.type || "—"}</td>
-                    <td>{formatDateTime(contact.created_at)}</td>
+                    <td data-label="Nom">{contact.name}</td>
+                    <td data-label="Email">{contact.email}</td>
+                    <td data-label="Objet">{contact.type || "—"}</td>
+                    <td data-label="Date">{formatDateTime(contact.created_at)}</td>
                   </tr>
                 ))}
               </tbody>
