@@ -16,6 +16,11 @@ const extraPhotos = [
     key: "personnelPreparation",
     alt: "Personnel de Tsaralevenana préparant la table de cérémonie",
   },
+  {
+    src: images.equipe,
+    key: "equipe",
+    alt: "L'équipe de la Maison Funéraire Tsaralevenana",
+  },
 ];
 
 export default function Gallery() {
