@@ -29,6 +29,8 @@ export default function WorldMap({ countries }: { countries: Country[] }) {
       ) : (
         <div className={styles.worldMap}>
           <ComposableMap
+            width={800}
+            height={400}
             projectionConfig={{ scale: 147 }}
             className={styles.worldMapSvg}
           >
