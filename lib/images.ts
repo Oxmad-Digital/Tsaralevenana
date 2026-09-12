@@ -44,3 +44,5 @@ export const imageUrls: string[] = imageFileNames.map(toImageUrl);
 
 export const logoUrl = toImageUrl("Tsaralevenana-logo.webp");
 export const heroUrl = toImageUrl("Tsaralevenana-hero-ciel-nuages.webp");
+export const faviconLightUrl = toImageUrl("Tsaralevenana-favicon-light.png");
+export const faviconDarkUrl = toImageUrl("Tsaralevenana-favicon-dark.png");

@@ -9,6 +9,7 @@ export const siteInfo = {
   phone: "+261 33 09 760 96",
   phoneHref: "tel:+261330976096",
   email: "Tsaralevenana.tana@gmail.com",
+  url: "https://maison-funeraire-tsaralevenana.com",
 };
 
 export type ServiceItem = {

@@ -93,8 +93,18 @@
   color: var(--color-text);
   padding: 13px 15px;
   font-size: 15px;
-  outline: none;
   min-width: 0;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+}
+
+.input:focus-visible,
+.textarea:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
 }
 
 .textarea {

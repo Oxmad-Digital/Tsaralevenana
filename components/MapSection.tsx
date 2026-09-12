@@ -40,6 +40,7 @@ export default function MapSection() {
               type="button"
               onClick={() => setActiveMapIndex(otherMapIndex)}
               className={styles.switchButton}
+              aria-label={`Afficher la carte : ${otherMap.name}`}
             >
               ↺ {otherMap.name}
             </button>
@@ -47,7 +48,7 @@ export default function MapSection() {
         </div>
         <div className={styles.mapWrapper}>
           <iframe
-            title={`Carte ${siteInfo.city}`}
+            title={`Carte ${activeMap.name}`}
             src={activeMap.embedUrl}
             loading="lazy"
             className={styles.iframe}

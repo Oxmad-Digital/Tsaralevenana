@@ -114,47 +114,55 @@ export default function Contact() {
           ) : (
             <form onSubmit={handleSubmit} className={styles.form}>
               <div className={styles.field}>
-                <label className={styles.label}>Nom complet</label>
+                <label htmlFor="contact-name" className={styles.label}>
+                  Nom complet
+                </label>
                 <input
+                  id="contact-name"
                   value={form.name}
                   onChange={updateField("name")}
                   placeholder="Votre nom"
                   className={styles.input}
-                  aria-label="Nom complet"
                   required
                 />
               </div>
               <div className={styles.fieldRow}>
                 <div className={styles.field}>
-                  <label className={styles.label}>Email</label>
+                  <label htmlFor="contact-email" className={styles.label}>
+                    Email
+                  </label>
                   <input
+                    id="contact-email"
                     type="email"
                     value={form.email}
                     onChange={updateField("email")}
                     placeholder="email@exemple.com"
                     className={styles.input}
-                    aria-label="Adresse email"
                     required
                   />
                 </div>
                 <div className={styles.field}>
-                  <label className={styles.label}>Téléphone</label>
+                  <label htmlFor="contact-phone" className={styles.label}>
+                    Téléphone
+                  </label>
                   <input
+                    id="contact-phone"
                     value={form.phone}
                     onChange={updateField("phone")}
                     placeholder="+261 ..."
                     className={styles.input}
-                    aria-label="Numéro de téléphone"
                   />
                 </div>
               </div>
               <div className={styles.field}>
-                <label className={styles.label}>Objet de la demande</label>
+                <label htmlFor="contact-type" className={styles.label}>
+                  Objet de la demande
+                </label>
                 <select
+                  id="contact-type"
                   value={form.type}
                   onChange={updateField("type")}
                   className={styles.input}
-                  aria-label="Objet de la demande"
                 >
                   {contactFormOptions.map((option) => (
                     <option key={option}>{option}</option>
@@ -162,14 +170,16 @@ export default function Contact() {
                 </select>
               </div>
               <div className={styles.field}>
-                <label className={styles.label}>Message</label>
+                <label htmlFor="contact-message" className={styles.label}>
+                  Message
+                </label>
                 <textarea
+                  id="contact-message"
                   value={form.message}
                   onChange={updateField("message")}
                   rows={4}
                   placeholder="Comment pouvons-nous vous aider ?"
                   className={styles.textarea}
-                  aria-label="Votre message"
                   required
                 />
               </div>

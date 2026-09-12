@@ -122,12 +122,14 @@
     background: var(--color-bg);
     box-shadow: -8px 0 32px rgba(44, 39, 32, 0.14);
     transform: translateX(100%);
-    transition: transform 0.35s ease;
+    transition: transform 0.35s ease, visibility 0.35s;
+    visibility: hidden;
     z-index: 55;
   }
 
   .mobileMenuOpen {
     transform: translateX(0);
+    visibility: visible;
   }
 
   .mobileLink {

@@ -4,15 +4,18 @@ import Footer from "@/components/Footer";
 import styles from "@/components/LegalPage.module.css";
 
 export const metadata: Metadata = {
-  title: "Mentions légales | Maison Funéraire Tsaralevenana",
+  title: "Mentions légales",
   description: "Mentions légales du site de la Maison Funéraire Tsaralevenana.",
+  alternates: {
+    canonical: "/mentions-legales",
+  },
 };
 
 export default function MentionsLegalesPage() {
   return (
     <>
       <Navbar />
-      <main className={styles.main}>
+      <main id="contenu" className={styles.main}>
         <h1 className={`sectionTitle ${styles.title}`}>Mentions légales</h1>
         <p className={styles.updated}>Dernière mise à jour : 10 septembre 2026</p>
 

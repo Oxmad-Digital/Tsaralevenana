@@ -21,19 +21,27 @@ export default function Faq() {
         <div className={styles.list}>
           {faqItems.map((item, index) => {
             const isOpen = openIndex === index;
+            const answerId = `faq-answer-${index}`;
             return (
               <div key={item.question} className={styles.item}>
                 <button
                   type="button"
+                  id={`faq-question-${index}`}
                   onClick={() => toggle(index)}
                   aria-expanded={isOpen}
+                  aria-controls={answerId}
                   className={styles.question}
                 >
                   <span>{item.question}</span>
                   <span className={styles.sign}>{isOpen ? "—" : "+"}</span>
                 </button>
                 {isOpen && (
-                  <div className={styles.answerWrapper}>
+                  <div
+                    id={answerId}
+                    role="region"
+                    aria-labelledby={`faq-question-${index}`}
+                    className={styles.answerWrapper}
+                  >
                     <p className={styles.answer}>{item.answer}</p>
                   </div>
                 )}

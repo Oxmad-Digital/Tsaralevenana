@@ -15,17 +15,19 @@ export default function HomePage() {
   return (
     <>
       <Navbar />
-      <Hero />
-      <About />
-      <SectionDivider />
-      <Services />
-      <Process />
-      <Gallery />
-      <SectionDivider />
-      <Faq />
-      <Locations />
-      <Contact />
-      <MapSection />
+      <main id="contenu">
+        <Hero />
+        <About />
+        <SectionDivider />
+        <Services />
+        <Process />
+        <Gallery />
+        <SectionDivider />
+        <Faq />
+        <Locations />
+        <Contact />
+        <MapSection />
+      </main>
       <Footer />
     </>
   );

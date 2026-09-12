@@ -53,6 +53,32 @@ textarea::placeholder {
   color: var(--color-text-faint);
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.skipLink {
+  position: absolute;
+  top: 0;
+  left: -9999px;
+  z-index: 100;
+  background: var(--color-gold);
+  color: var(--color-bg);
+  padding: 14px 22px;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+}
+
+.skipLink:focus {
+  left: 16px;
+  top: 16px;
+}
+
 .eyebrow {
   font-size: 12px;
   letter-spacing: 0.4em;
