@@ -33,6 +33,27 @@ await sql`
 `;
 
 await sql`
+  ALTER TABLE page_views ADD COLUMN IF NOT EXISTS visitor_id TEXT
+`;
+
+await sql`
+  CREATE INDEX IF NOT EXISTS page_views_visitor_id_idx ON page_views (visitor_id)
+`;
+
+await sql`
+  CREATE TABLE IF NOT EXISTS click_events (
+    id SERIAL PRIMARY KEY,
+    path TEXT NOT NULL,
+    visitor_id TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+  )
+`;
+
+await sql`
+  CREATE INDEX IF NOT EXISTS click_events_created_at_idx ON click_events (created_at)
+`;
+
+await sql`
   CREATE TABLE IF NOT EXISTS contact_submissions (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
@@ -44,4 +65,4 @@ await sql`
   )
 `;
 
-console.log("Migration terminée : tables admin_users, page_views, contact_submissions prêtes.");
+console.log("Migration terminée : tables admin_users, page_views, click_events, contact_submissions prêtes.");

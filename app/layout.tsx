@@ -4,6 +4,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { siteInfo } from "@/lib/data";
 import { heroUrl, faviconDarkUrl, faviconLightUrl } from "@/lib/images";
 import PageViewTracker from "@/components/PageViewTracker";
+import ClickTracker from "@/components/ClickTracker";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -105,6 +106,7 @@ export default function RootLayout({
           Aller au contenu
         </a>
         <PageViewTracker />
+        <ClickTracker />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}

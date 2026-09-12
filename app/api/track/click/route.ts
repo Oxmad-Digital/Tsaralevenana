@@ -12,8 +12,6 @@ export async function POST(request: Request) {
   }
 
   const path = typeof body.path === "string" ? body.path.slice(0, 255) : "";
-  const referrer = typeof body.referrer === "string" ? body.referrer.slice(0, 255) : null;
-  const country = request.headers.get("x-vercel-ip-country")?.slice(0, 2) || null;
 
   if (!path) {
     return NextResponse.json({ error: "Path requis." }, { status: 400 });
@@ -26,7 +24,7 @@ export async function POST(request: Request) {
   const { id: visitorId, isNew } = getVisitorId(request);
 
   await sql`
-    INSERT INTO page_views (path, referrer, country, visitor_id) VALUES (${path}, ${referrer}, ${country}, ${visitorId})
+    INSERT INTO click_events (path, visitor_id) VALUES (${path}, ${visitorId})
   `;
 
   const response = NextResponse.json({ success: true });

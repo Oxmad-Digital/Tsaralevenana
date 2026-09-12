@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS=--no-network-family-autoselection next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_OPTIONS=--no-network-family-autoselection next start",
     "lint": "next lint",
-    "db:migrate": "node --env-file=.env.local scripts/migrate.mjs",
-    "db:create-admin": "node --env-file=.env.local scripts/create-admin.mjs"
+    "db:migrate": "node --no-network-family-autoselection --env-file=.env.local scripts/migrate.mjs",
+    "db:create-admin": "node --no-network-family-autoselection --env-file=.env.local scripts/create-admin.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

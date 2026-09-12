@@ -41,6 +41,8 @@ export default async function AdminDashboard() {
     viewsTodayRows,
     views7dRows,
     views30dRows,
+    uniqueVisitorsRows,
+    totalClicksRows,
     dailyRows,
     topPagesRows,
     countryRows,
@@ -51,6 +53,8 @@ export default async function AdminDashboard() {
     sql`SELECT COUNT(*)::int AS count FROM page_views WHERE created_at >= date_trunc('day', now())`,
     sql`SELECT COUNT(*)::int AS count FROM page_views WHERE created_at >= now() - interval '7 days'`,
     sql`SELECT COUNT(*)::int AS count FROM page_views WHERE created_at >= now() - interval '30 days'`,
+    sql`SELECT COUNT(DISTINCT visitor_id)::int AS count FROM page_views WHERE visitor_id IS NOT NULL`,
+    sql`SELECT COUNT(*)::int AS count FROM click_events`,
     sql`
       SELECT to_char(date_trunc('day', created_at), 'YYYY-MM-DD') AS day, COUNT(*)::int AS count
       FROM page_views
@@ -84,6 +88,8 @@ export default async function AdminDashboard() {
   const viewsToday = (viewsTodayRows as CountRow[])[0]?.count ?? 0;
   const views7d = (views7dRows as CountRow[])[0]?.count ?? 0;
   const views30d = (views30dRows as CountRow[])[0]?.count ?? 0;
+  const uniqueVisitors = (uniqueVisitorsRows as CountRow[])[0]?.count ?? 0;
+  const totalClicks = (totalClicksRows as CountRow[])[0]?.count ?? 0;
   const totalContacts = (totalContactsRows as CountRow[])[0]?.count ?? 0;
   const topPages = topPagesRows as TopPageRow[];
   const recentContacts = recentContactsRows as ContactRow[];
@@ -124,6 +130,14 @@ export default async function AdminDashboard() {
         <div className={styles.statTile}>
           <span className={styles.statLabel}>Vues totales</span>
           <span className={styles.statValue}>{totalViews}</span>
+        </div>
+        <div className={styles.statTile}>
+          <span className={styles.statLabel}>Visiteurs uniques</span>
+          <span className={styles.statValue}>{uniqueVisitors}</span>
+        </div>
+        <div className={styles.statTile}>
+          <span className={styles.statLabel}>Clics</span>
+          <span className={styles.statValue}>{totalClicks}</span>
         </div>
         <div className={styles.statTile}>
           <span className={styles.statLabel}>Messages reçus</span>
