@@ -29,6 +29,35 @@
   }
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  transition: color 0.2s, gap 0.2s;
+}
+
+.backLink svg {
+  transition: transform 0.2s;
+}
+
+.backLink:hover {
+  color: var(--color-gold);
+  gap: 9px;
+}
+
+.backLink:hover svg {
+  transform: translateX(-2px);
+}
+
 .logoutButton {
   font-size: 11px;
   letter-spacing: 0.14em;

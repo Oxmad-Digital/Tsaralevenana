@@ -22,7 +22,16 @@ export default function AdminLayout({
           <Image src={logoUrl} alt={siteInfo.name} width={40} height={28} />
           <span>Administration</span>
         </div>
-        <LogoutButton />
+        <div className={styles.headerActions}>
+          <a href="/" className={styles.backLink}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5" />
+              <path d="M11 18l-6-6 6-6" />
+            </svg>
+            Retour au site
+          </a>
+          <LogoutButton />
+        </div>
       </header>
       <main className={styles.main}>{children}</main>
     </div>
