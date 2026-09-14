@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Jost } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import { siteInfo } from "@/lib/data";
 import { heroUrl, faviconDarkUrl, faviconLightUrl } from "@/lib/images";
 import PageViewTracker from "@/components/PageViewTracker";
@@ -113,7 +112,6 @@ export default function RootLayout({
         />
         {children}
       </body>
-      <GoogleAnalytics gaId="G-V4EYM36Y1F" />
     </html>
   );
 }
