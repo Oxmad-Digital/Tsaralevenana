@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type PointerEvent } from "react";
 import styles from "./admin.module.css";
+import { edgeShift, getAxisLabelIndexes, type Day } from "./chartAxis";
 
-type Day = { label: string; count: number };
+// Beyond this many days the per-day dots merge into a thick line, so only the line is drawn.
+const MAX_DOTS = 60;
 
 export default function LineChart({
   days,
@@ -36,6 +38,16 @@ export default function LineChart({
     .join(" ");
   const areaPath = `${linePath} L${width},${height} L0,${height} Z`;
   const hovered = hoverIndex !== null ? points[hoverIndex] : null;
+  const hoveredPercent = hovered ? (hovered.x / width) * 100 : 0;
+  const showDots = days.length <= MAX_DOTS;
+  const labelIndexes = getAxisLabelIndexes(days.length);
+
+  function handlePointer(event: PointerEvent<SVGRectElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const ratio = (event.clientX - rect.left) / rect.width;
+    const index = Math.round(ratio * (days.length - 1));
+    setHoverIndex(Math.min(days.length - 1, Math.max(0, index)));
+  }
 
   return (
     <div className={styles.lineChart}>
@@ -62,26 +74,46 @@ export default function LineChart({
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
           />
-          {points.map((point, index) => (
-            <g key={index}>
-              <circle cx={point.x} cy={point.y} r="1.8" fill="var(--color-gold)" />
+          {showDots &&
+            points.map((point) => (
               <circle
+                key={point.day.key}
                 cx={point.x}
                 cy={point.y}
-                r="7"
-                fill="transparent"
-                onMouseEnter={() => setHoverIndex(index)}
-                onMouseLeave={() => setHoverIndex(null)}
+                r="1.8"
+                fill="var(--color-gold)"
               />
-            </g>
-          ))}
+            ))}
+          {hovered && (
+            <circle
+              cx={hovered.x}
+              cy={hovered.y}
+              r="3"
+              fill="var(--color-gold)"
+              pointerEvents="none"
+            />
+          )}
+          <rect
+            x="0"
+            y="0"
+            width={width}
+            height={height}
+            fill="transparent"
+            style={{ touchAction: "pan-y" }}
+            onPointerDown={handlePointer}
+            onPointerMove={handlePointer}
+            onPointerLeave={(event) => {
+              if (event.pointerType === "mouse") setHoverIndex(null);
+            }}
+          />
         </svg>
         {hovered && (
           <div
             className={styles.chartTooltip}
             style={{
-              left: `${(hovered.x / width) * 100}%`,
+              left: `${hoveredPercent}%`,
               top: `${(hovered.y / height) * 100}%`,
+              transform: `translate(${edgeShift(hoveredPercent)}, -100%)`,
             }}
           >
             <span className={styles.chartTooltipValue}>
@@ -93,11 +125,18 @@ export default function LineChart({
         )}
       </div>
       <div className={styles.lineChartLabels}>
-        {days.map((day) => (
-          <span key={day.label} className={styles.lineChartLabel}>
-            {day.label}
-          </span>
-        ))}
+        {labelIndexes.map((index) => {
+          const percent = (points[index].x / width) * 100;
+          return (
+            <span
+              key={days[index].key}
+              className={styles.lineChartLabel}
+              style={{ left: `${percent}%`, transform: `translateX(${edgeShift(percent)})` }}
+            >
+              {days[index].label}
+            </span>
+          );
+        })}
       </div>
     </div>
   );

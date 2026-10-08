@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { sql } from "@/lib/db";
 import { getVisitorId, setVisitorCookie } from "@/lib/visitor";
 import { isBotUserAgent } from "@/lib/bot";
+import { getDevice } from "@/lib/device";
 
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
@@ -23,10 +24,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true });
   }
 
+  const device = getDevice(request.headers.get("user-agent"));
   const { id: visitorId, isNew } = getVisitorId(request);
 
   await sql`
-    INSERT INTO page_views (path, referrer, country, visitor_id) VALUES (${path}, ${referrer}, ${country}, ${visitorId})
+    INSERT INTO page_views (path, referrer, country, visitor_id, device) VALUES (${path}, ${referrer}, ${country}, ${visitorId}, ${device})
   `;
 
   const response = NextResponse.json({ success: true });

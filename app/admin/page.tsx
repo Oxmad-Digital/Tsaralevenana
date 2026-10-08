@@ -5,12 +5,15 @@ import styles from "./admin.module.css";
 import VisitsChart from "./VisitsChart";
 import ViewsTrendChart from "./ViewsTrendChart";
 import WorldMap from "./WorldMap";
+import StatsCards from "./StatsCards";
+import type { Day } from "./chartAxis";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+const DAYS_IN_CHART = 30;
+
 type CountRow = { count: number };
-type TopPageRow = { path: string; count: number };
 type DailyRow = { day: string; count: number };
 type CountryRow = { country: string | null; count: number };
 type ContactRow = {
@@ -20,8 +23,8 @@ type ContactRow = {
   created_at: string;
 };
 
-function formatDay(date: Date) {
-  return date.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" });
+function formatDayLabel(key: string) {
+  return `${key.slice(8, 10)}/${key.slice(5, 7)}`;
 }
 
 function formatDateTime(value: string) {
@@ -37,12 +40,24 @@ function formatDateTime(value: string) {
 export default async function AdminDashboard() {
   noStore();
 
+  const now = new Date();
+  const dayKeys = Array.from({ length: DAYS_IN_CHART }, (_, index) =>
+    new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate() - (DAYS_IN_CHART - 1 - index)
+      )
+    )
+      .toISOString()
+      .slice(0, 10)
+  );
+
   const [
     totalViewsRows,
     uniqueVisitorsRows,
     totalClicksRows,
     dailyRows,
-    topPagesRows,
     countryRows,
     totalContactsRows,
     recentContactsRows,
@@ -53,15 +68,8 @@ export default async function AdminDashboard() {
     sql`
       SELECT to_char(date_trunc('day', created_at), 'YYYY-MM-DD') AS day, COUNT(*)::int AS count
       FROM page_views
-      WHERE created_at >= now() - interval '13 days'
+      WHERE created_at >= ${`${dayKeys[0]}T00:00:00Z`}::timestamptz
       GROUP BY day
-    `,
-    sql`
-      SELECT path, COUNT(*)::int AS count
-      FROM page_views
-      GROUP BY path
-      ORDER BY count DESC
-      LIMIT 5
     `,
     sql`
       SELECT country, COUNT(*)::int AS count
@@ -83,24 +91,19 @@ export default async function AdminDashboard() {
   const uniqueVisitors = (uniqueVisitorsRows as CountRow[])[0]?.count ?? 0;
   const totalClicks = (totalClicksRows as CountRow[])[0]?.count ?? 0;
   const totalContacts = (totalContactsRows as CountRow[])[0]?.count ?? 0;
-  const topPages = topPagesRows as TopPageRow[];
   const recentContacts = recentContactsRows as ContactRow[];
   const countries = (countryRows as CountryRow[])
     .filter((row): row is { country: string; count: number } => Boolean(row.country))
     .map((row) => ({ code: row.country, name: getCountryName(row.country), count: row.count }));
   const maxCountryCount = Math.max(1, ...countries.map((c) => c.count));
 
-  const dailyMap = new Map(
-    (dailyRows as DailyRow[]).map((row) => [row.day, row.count])
-  );
-  const days = Array.from({ length: 14 }).map((_, index) => {
-    const date = new Date();
-    date.setDate(date.getDate() - (13 - index));
-    const key = date.toISOString().slice(0, 10);
-    return { label: formatDay(date), count: dailyMap.get(key) ?? 0 };
-  });
+  const dailyMap = new Map((dailyRows as DailyRow[]).map((row) => [row.day, row.count]));
+  const days: Day[] = dayKeys.map((key) => ({
+    key,
+    label: formatDayLabel(key),
+    count: dailyMap.get(key) ?? 0,
+  }));
   const maxDailyCount = Math.max(1, ...days.map((day) => day.count));
-  const maxTopPageCount = Math.max(1, ...topPages.map((page) => page.count));
 
   return (
     <div className={styles.dashboard}>
@@ -130,29 +133,7 @@ export default async function AdminDashboard() {
         <ViewsTrendChart days={days} maxDailyCount={maxDailyCount} />
       </div>
 
-      <section className={styles.panel}>
-        <h2 className={styles.panelTitle}>Pages les plus visitées</h2>
-        {topPages.length === 0 ? (
-          <p className={styles.emptyState}>Pas encore de données.</p>
-        ) : (
-          <ul className={styles.topPagesList}>
-            {topPages.map((page) => (
-              <li key={page.path} className={styles.topPagesRow}>
-                <div className={styles.topPagesMeta}>
-                  <span className={styles.topPagesPath}>{page.path}</span>
-                  <span className={styles.topPagesCount}>{page.count}</span>
-                </div>
-                <div className={styles.topPagesTrack}>
-                  <div
-                    className={styles.topPagesFill}
-                    style={{ width: `${(page.count / maxTopPageCount) * 100}%` }}
-                  />
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      <StatsCards />
 
       <WorldMap countries={countries} />
 

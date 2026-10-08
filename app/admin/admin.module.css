@@ -237,13 +237,16 @@
 }
 
 .lineChartLabels {
-  display: flex;
-  justify-content: space-between;
+  position: relative;
+  height: 12px;
 }
 
 .lineChartLabel {
+  position: absolute;
+  top: 0;
   font-size: 9px;
   color: var(--color-text-faint);
+  white-space: nowrap;
 }
 
 .emptyState {
@@ -251,11 +254,16 @@
   color: var(--color-text-faint);
 }
 
+.barChartWrap {
+  position: relative;
+  margin-bottom: 10px;
+}
+
 .barChart {
   display: flex;
   align-items: flex-end;
-  gap: 6px;
   height: 160px;
+  touch-action: pan-y;
 }
 
 .barColumn {
@@ -265,11 +273,10 @@
   align-items: center;
   justify-content: flex-end;
   height: 100%;
-  gap: 8px;
 }
 
 .bar {
-  width: 100%;
+  width: 60%;
   max-width: 22px;
   min-height: 3px;
   background: var(--color-gold);
@@ -277,16 +284,8 @@
   transition: opacity 0.2s;
 }
 
-.barColumn:hover .bar {
+.barColumnActive .bar {
   opacity: 0.75;
-}
-
-.barLabel {
-  font-size: 9px;
-  color: var(--color-text-faint);
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  white-space: nowrap;
 }
 
 .topPagesList {

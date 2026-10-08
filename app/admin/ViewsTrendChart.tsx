@@ -1,7 +1,6 @@
 import styles from "./admin.module.css";
 import LineChart from "./LineChart";
-
-type Day = { label: string; count: number };
+import type { Day } from "./chartAxis";
 
 export default function ViewsTrendChart({
   days,
@@ -12,13 +11,13 @@ export default function ViewsTrendChart({
 }) {
   return (
     <section className={styles.panel}>
-      <h2 className={styles.panelTitle}>Vues — 14 derniers jours</h2>
+      <h2 className={styles.panelTitle}>Vues — 30 derniers jours</h2>
       <LineChart
         days={days}
         maxDailyCount={maxDailyCount}
         gradientId="viewsLineFill"
         unitLabel="vue"
-        ariaLabel="Vues des 14 derniers jours"
+        ariaLabel="Vues des 30 derniers jours"
       />
     </section>
   );
