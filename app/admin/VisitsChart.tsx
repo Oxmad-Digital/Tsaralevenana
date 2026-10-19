@@ -34,7 +34,7 @@ export default function VisitsChart({
   return (
     <section className={styles.panel}>
       <div className={styles.panelHeader}>
-        <h2 className={styles.panelTitle}>Visites — 30 derniers jours</h2>
+        <h2 className={styles.panelTitle}>Visites — depuis le début</h2>
         <div className={styles.chartToggle} role="group" aria-label="Type de graphique">
           <button
             type="button"
@@ -65,7 +65,7 @@ export default function VisitsChart({
           maxDailyCount={maxDailyCount}
           gradientId="visitsLineFill"
           unitLabel="visite"
-          ariaLabel="Visites des 30 derniers jours"
+          ariaLabel="Visites depuis le début"
         />
       ) : (
         <div>

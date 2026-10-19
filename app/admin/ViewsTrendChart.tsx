@@ -11,13 +11,13 @@ export default function ViewsTrendChart({
 }) {
   return (
     <section className={styles.panel}>
-      <h2 className={styles.panelTitle}>Vues — 30 derniers jours</h2>
+      <h2 className={styles.panelTitle}>Vues — depuis le début</h2>
       <LineChart
         days={days}
         maxDailyCount={maxDailyCount}
         gradientId="viewsLineFill"
         unitLabel="vue"
-        ariaLabel="Vues des 30 derniers jours"
+        ariaLabel="Vues depuis le début"
       />
     </section>
   );

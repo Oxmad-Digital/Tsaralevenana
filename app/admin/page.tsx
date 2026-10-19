@@ -11,7 +11,8 @@ import type { Day } from "./chartAxis";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-const DAYS_IN_CHART = 30;
+const MIN_DAYS_IN_CHART = 7;
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 type CountRow = { count: number };
 type DailyRow = { day: string; count: number };
@@ -23,8 +24,9 @@ type ContactRow = {
   created_at: string;
 };
 
-function formatDayLabel(key: string) {
-  return `${key.slice(8, 10)}/${key.slice(5, 7)}`;
+function formatDayLabel(key: string, withYear: boolean) {
+  const label = `${key.slice(8, 10)}/${key.slice(5, 7)}`;
+  return withYear ? `${label}/${key.slice(2, 4)}` : label;
 }
 
 function formatDateTime(value: string) {
@@ -39,19 +41,6 @@ function formatDateTime(value: string) {
 
 export default async function AdminDashboard() {
   noStore();
-
-  const now = new Date();
-  const dayKeys = Array.from({ length: DAYS_IN_CHART }, (_, index) =>
-    new Date(
-      Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate() - (DAYS_IN_CHART - 1 - index)
-      )
-    )
-      .toISOString()
-      .slice(0, 10)
-  );
 
   const [
     totalViewsRows,
@@ -68,7 +57,6 @@ export default async function AdminDashboard() {
     sql`
       SELECT to_char(date_trunc('day', created_at), 'YYYY-MM-DD') AS day, COUNT(*)::int AS count
       FROM page_views
-      WHERE created_at >= ${`${dayKeys[0]}T00:00:00Z`}::timestamptz
       GROUP BY day
     `,
     sql`
@@ -98,9 +86,25 @@ export default async function AdminDashboard() {
   const maxCountryCount = Math.max(1, ...countries.map((c) => c.count));
 
   const dailyMap = new Map((dailyRows as DailyRow[]).map((row) => [row.day, row.count]));
+
+  // The chart covers every day from the first recorded view up to today,
+  // falling back to the last MIN_DAYS_IN_CHART days when there is little data.
+  const now = new Date();
+  const todayUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  const earliestKey = [...dailyMap.keys()].sort()[0];
+  const earliestUtc = earliestKey ? Date.parse(`${earliestKey}T00:00:00Z`) : todayUtc;
+  const dayCount = Math.max(
+    MIN_DAYS_IN_CHART,
+    Math.round((todayUtc - earliestUtc) / DAY_MS) + 1
+  );
+  const dayKeys = Array.from({ length: dayCount }, (_, index) =>
+    new Date(todayUtc - (dayCount - 1 - index) * DAY_MS).toISOString().slice(0, 10)
+  );
+  const spansYears = dayKeys[0].slice(0, 4) !== dayKeys[dayKeys.length - 1].slice(0, 4);
+
   const days: Day[] = dayKeys.map((key) => ({
     key,
-    label: formatDayLabel(key),
+    label: formatDayLabel(key, spansYears),
     count: dailyMap.get(key) ?? 0,
   }));
   const maxDailyCount = Math.max(1, ...days.map((day) => day.count));
