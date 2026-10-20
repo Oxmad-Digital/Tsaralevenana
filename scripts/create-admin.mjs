@@ -14,9 +14,13 @@ if (!email || !password) {
 const passwordHash = await bcrypt.hash(password, 12);
 
 await sql`
-  INSERT INTO admin_users (email, password_hash)
-  VALUES (${email}, ${passwordHash})
-  ON CONFLICT (email) DO UPDATE SET password_hash = EXCLUDED.password_hash
+  INSERT INTO admin_users (email, password_hash, role)
+  VALUES (${email.trim().toLowerCase()}, ${passwordHash}, 'admin')
+  ON CONFLICT (email) DO UPDATE SET
+    password_hash = EXCLUDED.password_hash,
+    role = 'admin',
+    invitation_token_hash = NULL,
+    invitation_expires_at = NULL
 `;
 
 console.log(`Compte admin prêt pour ${email}.`);

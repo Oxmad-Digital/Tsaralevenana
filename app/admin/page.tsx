@@ -2,8 +2,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { sql } from "@/lib/db";
 import { getCountryName } from "@/lib/countries";
 import styles from "./admin.module.css";
-import VisitsChart from "./VisitsChart";
-import ViewsTrendChart from "./ViewsTrendChart";
+import PeriodOverview, { type Period, type PeriodData } from "./PeriodOverview";
 import WorldMap from "./WorldMap";
 import StatsCards from "./StatsCards";
 import type { Day } from "./chartAxis";
@@ -14,7 +13,14 @@ export const revalidate = 0;
 const MIN_DAYS_IN_CHART = 7;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-type CountRow = { count: number };
+type WindowRow = { day: number; week: number; month: number; all: number };
+type ViewWindowRow = WindowRow & {
+  visitors_day: number;
+  visitors_week: number;
+  visitors_month: number;
+  visitors_all: number;
+};
+type HourlyRow = { hour: number; count: number };
 type DailyRow = { day: string; count: number };
 type CountryRow = { country: string | null; count: number };
 type ContactRow = {
@@ -42,18 +48,56 @@ function formatDateTime(value: string) {
 export default async function AdminDashboard() {
   noStore();
 
+  // Periods are rolling windows ending today (UTC), matching the daily chart buckets.
+  const now = new Date();
+  const todayUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  const dayStart = new Date(todayUtc).toISOString();
+  const weekStart = new Date(todayUtc - 6 * DAY_MS).toISOString();
+  const monthStart = new Date(todayUtc - 29 * DAY_MS).toISOString();
+
   const [
-    totalViewsRows,
-    uniqueVisitorsRows,
-    totalClicksRows,
+    viewWindowRows,
+    clickWindowRows,
+    contactWindowRows,
+    hourlyRows,
     dailyRows,
     countryRows,
-    totalContactsRows,
     recentContactsRows,
   ] = await Promise.all([
-    sql`SELECT COUNT(*)::int AS count FROM page_views`,
-    sql`SELECT COUNT(DISTINCT visitor_id)::int AS count FROM page_views WHERE visitor_id IS NOT NULL`,
-    sql`SELECT COUNT(*)::int AS count FROM click_events`,
+    sql`
+      SELECT
+        COUNT(*) FILTER (WHERE created_at >= ${dayStart}::timestamptz)::int AS day,
+        COUNT(*) FILTER (WHERE created_at >= ${weekStart}::timestamptz)::int AS week,
+        COUNT(*) FILTER (WHERE created_at >= ${monthStart}::timestamptz)::int AS month,
+        COUNT(*)::int AS all,
+        COUNT(DISTINCT visitor_id) FILTER (WHERE created_at >= ${dayStart}::timestamptz)::int AS visitors_day,
+        COUNT(DISTINCT visitor_id) FILTER (WHERE created_at >= ${weekStart}::timestamptz)::int AS visitors_week,
+        COUNT(DISTINCT visitor_id) FILTER (WHERE created_at >= ${monthStart}::timestamptz)::int AS visitors_month,
+        COUNT(DISTINCT visitor_id)::int AS visitors_all
+      FROM page_views
+    `,
+    sql`
+      SELECT
+        COUNT(*) FILTER (WHERE created_at >= ${dayStart}::timestamptz)::int AS day,
+        COUNT(*) FILTER (WHERE created_at >= ${weekStart}::timestamptz)::int AS week,
+        COUNT(*) FILTER (WHERE created_at >= ${monthStart}::timestamptz)::int AS month,
+        COUNT(*)::int AS all
+      FROM click_events
+    `,
+    sql`
+      SELECT
+        COUNT(*) FILTER (WHERE created_at >= ${dayStart}::timestamptz)::int AS day,
+        COUNT(*) FILTER (WHERE created_at >= ${weekStart}::timestamptz)::int AS week,
+        COUNT(*) FILTER (WHERE created_at >= ${monthStart}::timestamptz)::int AS month,
+        COUNT(*)::int AS all
+      FROM contact_submissions
+    `,
+    sql`
+      SELECT EXTRACT(HOUR FROM created_at AT TIME ZONE 'UTC')::int AS hour, COUNT(*)::int AS count
+      FROM page_views
+      WHERE created_at >= ${dayStart}::timestamptz
+      GROUP BY hour
+    `,
     sql`
       SELECT to_char(date_trunc('day', created_at), 'YYYY-MM-DD') AS day, COUNT(*)::int AS count
       FROM page_views
@@ -66,7 +110,6 @@ export default async function AdminDashboard() {
       GROUP BY country
       ORDER BY count DESC
     `,
-    sql`SELECT COUNT(*)::int AS count FROM contact_submissions`,
     sql`
       SELECT name, email, type, created_at
       FROM contact_submissions
@@ -75,10 +118,6 @@ export default async function AdminDashboard() {
     `,
   ]);
 
-  const totalViews = (totalViewsRows as CountRow[])[0]?.count ?? 0;
-  const uniqueVisitors = (uniqueVisitorsRows as CountRow[])[0]?.count ?? 0;
-  const totalClicks = (totalClicksRows as CountRow[])[0]?.count ?? 0;
-  const totalContacts = (totalContactsRows as CountRow[])[0]?.count ?? 0;
   const recentContacts = recentContactsRows as ContactRow[];
   const countries = (countryRows as CountryRow[])
     .filter((row): row is { country: string; count: number } => Boolean(row.country))
@@ -87,55 +126,53 @@ export default async function AdminDashboard() {
 
   const dailyMap = new Map((dailyRows as DailyRow[]).map((row) => [row.day, row.count]));
 
-  // The chart covers every day from the first recorded view up to today,
+  // The "Total" chart covers every day from the first recorded view up to today,
   // falling back to the last MIN_DAYS_IN_CHART days when there is little data.
-  const now = new Date();
-  const todayUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
   const earliestKey = [...dailyMap.keys()].sort()[0];
   const earliestUtc = earliestKey ? Date.parse(`${earliestKey}T00:00:00Z`) : todayUtc;
   const dayCount = Math.max(
     MIN_DAYS_IN_CHART,
     Math.round((todayUtc - earliestUtc) / DAY_MS) + 1
   );
-  const dayKeys = Array.from({ length: dayCount }, (_, index) =>
-    new Date(todayUtc - (dayCount - 1 - index) * DAY_MS).toISOString().slice(0, 10)
-  );
-  const spansYears = dayKeys[0].slice(0, 4) !== dayKeys[dayKeys.length - 1].slice(0, 4);
+  const lastDays = (count: number): Day[] => {
+    const keys = Array.from({ length: count }, (_, index) =>
+      new Date(todayUtc - (count - 1 - index) * DAY_MS).toISOString().slice(0, 10)
+    );
+    const spansYears = keys[0].slice(0, 4) !== keys[keys.length - 1].slice(0, 4);
+    return keys.map((key) => ({
+      key,
+      label: formatDayLabel(key, spansYears),
+      count: dailyMap.get(key) ?? 0,
+    }));
+  };
 
-  const days: Day[] = dayKeys.map((key) => ({
-    key,
-    label: formatDayLabel(key, spansYears),
-    count: dailyMap.get(key) ?? 0,
+  const hourlyMap = new Map((hourlyRows as HourlyRow[]).map((row) => [row.hour, row.count]));
+  const hours: Day[] = Array.from({ length: 24 }, (_, hour) => ({
+    key: `h${hour}`,
+    label: `${String(hour).padStart(2, "0")}h`,
+    count: hourlyMap.get(hour) ?? 0,
   }));
-  const maxDailyCount = Math.max(1, ...days.map((day) => day.count));
+
+  const views = (viewWindowRows as ViewWindowRow[])[0];
+  const clicks = (clickWindowRows as WindowRow[])[0];
+  const contacts = (contactWindowRows as WindowRow[])[0];
+  const statsFor = (period: Period) => ({
+    views: views[period],
+    visitors: views[`visitors_${period}`],
+    clicks: clicks[period],
+    contacts: contacts[period],
+  });
+
+  const periods: Record<Period, PeriodData> = {
+    day: { stats: statsFor("day"), series: hours, chartTitle: "Vues par heure — aujourd'hui (UTC)" },
+    week: { stats: statsFor("week"), series: lastDays(7), chartTitle: "Vues par jour — 7 derniers jours" },
+    month: { stats: statsFor("month"), series: lastDays(30), chartTitle: "Vues par jour — 30 derniers jours" },
+    all: { stats: statsFor("all"), series: lastDays(dayCount), chartTitle: "Vues par jour — depuis le début" },
+  };
 
   return (
     <div className={styles.dashboard}>
-      <h1 className={styles.pageTitle}>Tableau de bord</h1>
-
-      <div className={styles.statGrid}>
-        <div className={styles.statTile}>
-          <span className={styles.statLabel}>Vues totales</span>
-          <span className={styles.statValue}>{totalViews}</span>
-        </div>
-        <div className={styles.statTile}>
-          <span className={styles.statLabel}>Visiteurs uniques</span>
-          <span className={styles.statValue}>{uniqueVisitors}</span>
-        </div>
-        <div className={styles.statTile}>
-          <span className={styles.statLabel}>Clics</span>
-          <span className={styles.statValue}>{totalClicks}</span>
-        </div>
-        <div className={styles.statTile}>
-          <span className={styles.statLabel}>Messages reçus</span>
-          <span className={styles.statValue}>{totalContacts}</span>
-        </div>
-      </div>
-
-      <div className={styles.panelGrid}>
-        <VisitsChart days={days} maxDailyCount={maxDailyCount} />
-        <ViewsTrendChart days={days} maxDailyCount={maxDailyCount} />
-      </div>
+      <PeriodOverview data={periods} />
 
       <StatsCards />
 

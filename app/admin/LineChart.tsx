@@ -55,6 +55,7 @@ export default function LineChart({
         <svg
           viewBox={`0 0 ${width} ${height}`}
           className={styles.lineChartSvg}
+          style={{ aspectRatio: `${width} / ${height}` }}
           role="img"
           aria-label={ariaLabel}
         >

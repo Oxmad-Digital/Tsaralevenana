@@ -1,0 +1,82 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background: var(--color-bg);
+}
+
+.card {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(32px, 6vw, 48px) clamp(20px, 5vw, 40px);
+  background: var(--color-bg-card);
+  border: 1px solid rgba(160, 125, 52, 0.18);
+}
+
+.logo {
+  margin-bottom: 20px;
+}
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 10px;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: clamp(30px, 6vw, 40px);
+  color: var(--color-text);
+  margin-bottom: 16px;
+}
+
+.message {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-text-soft);
+  white-space: pre-line;
+  margin-bottom: 28px;
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(160, 125, 52, 0.18);
+  width: 100%;
+}
+
+.contactLabel {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.phone {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  color: var(--color-gold);
+}
+
+.email {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  word-break: break-all;
+}
+
+.phone:hover,
+.email:hover {
+  color: var(--color-gold-hover);
+}

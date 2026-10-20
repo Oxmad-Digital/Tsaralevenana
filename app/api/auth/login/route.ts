@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { sql } from "@/lib/db";
-import { createSessionToken, SESSION_COOKIE, SESSION_DURATION_SECONDS } from "@/lib/auth";
+import { setSessionCookie } from "@/lib/admin-session";
 
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   const rows = await sql`
     SELECT id, email, password_hash FROM admin_users WHERE email = ${email} LIMIT 1
   `;
-  const user = rows[0] as { id: number; email: string; password_hash: string } | undefined;
+  const user = rows[0] as { id: number; email: string; password_hash: string | null } | undefined;
 
   // Hash factice pour éviter qu'un temps de réponse différent ne révèle si l'email existe.
   const DUMMY_HASH =
@@ -34,6 +34,17 @@ export async function POST(request: Request) {
     user?.password_hash ?? DUMMY_HASH
   );
 
+  // An invited account has no password until the invitation link is used.
+  if (user && user.password_hash === null) {
+    return NextResponse.json(
+      {
+        error:
+          "Ce compte n'est pas encore activé. Utilisez le lien reçu par email pour choisir votre mot de passe.",
+      },
+      { status: 403 }
+    );
+  }
+
   if (!user || !passwordMatches) {
     return NextResponse.json(
       { error: "Identifiants incorrects." },
@@ -41,16 +52,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const token = await createSessionToken({ sub: String(user.id), email: user.email });
-
   const response = NextResponse.json({ success: true });
-  response.cookies.set(SESSION_COOKIE, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: SESSION_DURATION_SECONDS,
-  });
-
+  await setSessionCookie(response, user);
   return response;
 }

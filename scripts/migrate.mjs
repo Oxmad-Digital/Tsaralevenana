@@ -65,4 +65,38 @@ await sql`
   )
 `;
 
-console.log("Migration terminée : tables admin_users, page_views, click_events, contact_submissions prêtes.");
+await sql`
+  CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+  )
+`;
+
+await sql`
+  INSERT INTO settings (key, value) VALUES
+    ('maintenance_enabled', 'false'),
+    ('maintenance_message', '')
+  ON CONFLICT (key) DO NOTHING
+`;
+
+// Roles and invitations. Existing accounts become admins; new accounts default to member.
+// Sent as one transaction: the neon() HTTP driver cannot hold BEGIN/COMMIT across calls.
+await sql.transaction([
+  sql`
+    ALTER TABLE admin_users
+      ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT 'admin'
+      CHECK (role IN ('admin', 'member'))
+  `,
+  sql`ALTER TABLE admin_users ALTER COLUMN role SET DEFAULT 'member'`,
+  sql`ALTER TABLE admin_users ALTER COLUMN password_hash DROP NOT NULL`,
+  sql`ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS invitation_token_hash TEXT`,
+  sql`ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS invitation_expires_at TIMESTAMPTZ`,
+  sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS admin_users_invitation_token_hash_idx
+      ON admin_users (invitation_token_hash)
+      WHERE invitation_token_hash IS NOT NULL
+  `,
+]);
+
+console.log("Migration terminée : tables admin_users (rôles, invitations), page_views, click_events, contact_submissions, settings prêtes.");

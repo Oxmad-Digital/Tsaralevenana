@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS=--no-network-family-autoselection next dev",
+    "dev": "node --no-network-family-autoselection node_modules/next/dist/bin/next dev",
     "build": "next build",
-    "start": "NODE_OPTIONS=--no-network-family-autoselection next start",
+    "start": "node --no-network-family-autoselection node_modules/next/dist/bin/next start",
     "lint": "next lint",
     "db:migrate": "node --no-network-family-autoselection --env-file=.env.local scripts/migrate.mjs",
     "db:create-admin": "node --no-network-family-autoselection --env-file=.env.local scripts/create-admin.mjs"
