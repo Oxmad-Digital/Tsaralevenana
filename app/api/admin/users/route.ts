@@ -74,6 +74,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Rôle invalide." }, { status: 400 });
   }
 
+  if (!process.env.RESEND_API_KEY?.trim()) {
+    return NextResponse.json(
+      { error: "Envoi des invitations non configuré : RESEND_API_KEY manquant." },
+      { status: 500 }
+    );
+  }
+
   const existingRows = (await sql`
     SELECT id, role, password_hash IS NOT NULL AS active, invitation_token_hash, invitation_expires_at
     FROM admin_users WHERE email = ${email} LIMIT 1

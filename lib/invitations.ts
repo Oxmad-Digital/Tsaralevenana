@@ -42,7 +42,7 @@ export async function sendInvitationEmail({
   role: Role;
   link: string;
 }) {
-  const resendApiKey = process.env.RESEND_API_KEY;
+  const resendApiKey = process.env.RESEND_API_KEY?.trim();
   if (!resendApiKey) {
     throw new Error("RESEND_API_KEY manquant.");
   }

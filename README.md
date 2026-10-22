@@ -40,6 +40,23 @@ npm install
 npm run dev
 ```
 
+## Configuration des emails
+
+Ajoutez dans `.env.local` (sans publier les secrets) :
+
+```dotenv
+RESEND_API_KEY=re_votre_cle
+CONTACT_EMAIL=contact@example.com
+NEXT_PUBLIC_SITE_URL=https://votre-site.example
+```
+
+Les invitations administrateur nécessitent `RESEND_API_KEY`. Le domaine
+`maison-funeraire-tsaralevenana.com`, utilisé comme expéditeur, doit être vérifié
+dans le compte Resend associé à cette clé. `CONTACT_EMAIL` est le destinataire
+du formulaire de contact. `NEXT_PUBLIC_SITE_URL` définit l'adresse du site dans
+les liens d'invitation ; sans cette variable, l'origine de la requête est utilisée.
+Redémarrez le serveur de développement après avoir modifié la configuration.
+
 ## Photos
 
 Les emplacements d'images utilisent le composant `PhotoFrame`. Pour
